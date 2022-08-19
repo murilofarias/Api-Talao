@@ -1,6 +1,5 @@
-import { Injectable } from "@nestjs/common";
+import { Faixa } from "../domain/faixa";
 import { FaixaRepositoryInterface } from "../plug/faixa.repository.interface";
-import { Faixa } from "./faixa";
 
 
 export class CriarFaixaUseCase{

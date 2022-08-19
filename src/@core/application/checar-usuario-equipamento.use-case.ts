@@ -2,11 +2,11 @@
 //não services do Nest.js - casos de uso vão ser o service
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { EquipamentoSchema } from "src/adapter/repository/type-orm/equipamento.schema";
-import { UsuarioEquipamentoSchema } from "src/adapter/repository/type-orm/usuario-equipamento.schema";
-import { UsuarioSchema } from "src/adapter/repository/type-orm/usuario.schema";
-import { UsuarioEquipamento } from "src/domain/model/usuario-equipamento";
+import { EquipamentoSchema } from "src/infra/db/typeorm/equipamento.schema";
+import { UsuarioEquipamentoSchema } from "src/infra/db/typeorm/usuario-equipamento.schema";
+import { UsuarioSchema } from "src/infra/db/typeorm/usuario.schema";
 import { Repository } from "typeorm";
+import { UsuarioEquipamento } from "../domain/usuario-equipamento";
 
 @Injectable()
 export class ChecarUsuarioEquipamentoUseCase {

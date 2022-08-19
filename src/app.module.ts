@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FaixasController } from './faixas/faixas.controller';
 import { FaixasService } from './faixas/faixas.service';
+import { FaixasModule } from './faixas/faixas.module';
 
 @Module({
   imports: [
@@ -16,9 +17,10 @@ import { FaixasService } from './faixas/faixas.service';
       database: 'helios-talao',
       autoLoadEntities: true,
       synchronize: true,
-    })
+    }),
+    FaixasModule
   ],
-  controllers: [AppController, FaixasController],
-  providers: [AppService, FaixasService],
+  controllers: [AppController],
+  providers: [AppService]
 })
 export class AppModule {}

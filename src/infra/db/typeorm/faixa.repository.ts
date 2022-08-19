@@ -1,10 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { Talao } from "src/domain/model/talao";
 import { InjectRepository } from '@nestjs/typeorm';
+import { Faixa } from "src/@core/domain/faixa";
+import { Talao } from "src/@core/domain/talao";
+
+import { FaixaRepositoryInterface } from "src/@core/plug/faixa.repository.interface";
 import { Repository } from 'typeorm';
-import {FaixaRepositoryInterface } from "src/domain/plug/faixa.repository.interface";
 import { FaixaSchema } from "./faixa.schema";
-import { Faixa } from "src/domain/model/faixa";
 import { TalaoSchema } from "./talao.schema";
 
 @Injectable()
