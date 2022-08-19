@@ -39,6 +39,13 @@ import { FaixasService } from './faixas.service';
             return new LiberarTaloesUseCase(faixaRepo);
           },
           inject: [FaixaRepository],
+        },
+        { 
+          provide: CriarFaixaUseCase,
+          useFactory: (faixaRepo: FaixaRepositoryInterface) => {
+            return new CriarFaixaUseCase(faixaRepo);
+          },
+          inject: [FaixaRepository],
         }
       ],
     controllers: [FaixasController],
