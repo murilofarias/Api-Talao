@@ -6,13 +6,13 @@ import { SituacaoTalao } from "./enum/situacao-talao";
 
 
 export class Talao {
-    constructor(faixa: Faixa, agente: Usuario, equipamento: Equipamento, prefixo: string, numero: string, id :string = null){
+    constructor(faixa: Faixa, usuario: Usuario, equipamento: Equipamento, prefixo: string, numero: string, id :string = null){
 
         if(id)
             this.id = id;
             
         this.faixa = faixa;
-        this._agente = agente;
+        this._usuario = usuario;
         this._equipamento = equipamento;
         this._identificador = prefixo + numero.padStart(10 - prefixo.length, "0" );
         this._situacao = SituacaoTalao.Liberado;
@@ -34,10 +34,10 @@ export class Talao {
     }
          
 
-    private _agente: Usuario;
+    private _usuario: Usuario;
 
-    get agente(){
-        return this._agente;
+    get usuario(){
+        return this._usuario;
     }
 
     private _equipamento: Equipamento;

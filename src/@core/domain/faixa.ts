@@ -71,8 +71,8 @@ export class Faixa{
         const maiorNumeroLiberadoPedido = (this._proximo + quantidade -1 );
 
         //Se o maior numero a ser liberado pelo pedido ultrapassa o numero final, só é liberado até o número final
-        const maiorNumeroLiberado = maiorNumeroLiberadoPedido <= this._numFinal ? maiorNumeroLiberadoPedido: this._numFinal
-        const agenteAlvo = liberarSomenteAoAgente ? usuarioEquipamento.usuario : null
+        const maiorNumeroLiberado = maiorNumeroLiberadoPedido <= this._numFinal ? maiorNumeroLiberadoPedido: this._numFinal;
+        const agenteAlvo = liberarSomenteAoAgente ? usuarioEquipamento.usuario : null;
         for(let numeroTalao = this._proximo; numeroTalao <= maiorNumeroLiberado; numeroTalao++){
             const talao = new Talao(this, agenteAlvo, usuarioEquipamento.equipamento, this.prefixo, numeroTalao.toString())
             taloes.push(talao);
