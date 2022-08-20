@@ -49,10 +49,8 @@ export class ChecarUsuarioEquipamentoUseCase {
             mensagensErro.push("Associação do usuário com o equipamento não está mais ativa");
 
     const usuarioEquipamento = usuarioEquipamentoSchema;
-    const usuario = usuarioSchema;
-    const equipamento = equipamentoSchema;
-    usuarioEquipamento.usuario = usuario;
-    usuarioEquipamento.equipamento = equipamento;
+    usuarioEquipamento.usuario = usuarioSchema;
+    usuarioEquipamento.equipamento = equipamentoSchema;
 
     return this.gerarResposta(mensagensErro, usuarioEquipamentoSchema);
   }
