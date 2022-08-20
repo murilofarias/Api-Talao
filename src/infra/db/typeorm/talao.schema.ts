@@ -24,9 +24,7 @@ export class TalaoSchema {
   @ManyToOne(() => UsuarioSchema, (usuario) => usuario.taloes)
   usuario: UsuarioSchema;
 
-  @ManyToOne(() => FaixaSchema, (faixa) => faixa.taloes, {
-    cascade: true,
-  })
+  @ManyToOne(() => FaixaSchema, (faixa) => faixa.taloes)
   faixa: FaixaSchema
 
 
