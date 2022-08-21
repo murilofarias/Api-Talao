@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { Body, Controller,Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { Equipamento } from './@core/domain/equipamento';
 import { Usuario } from './@core/domain/usuario';
 import { AppService } from './app.service';
