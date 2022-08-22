@@ -1,5 +1,5 @@
 {
-  "name": "helios-api-talaoeletronico-nestjs",
+  "name": "helios-api-talao-nestjs-DES",
   "version": "0.0.1",
   "publishConfig": {
     "registry": "https://nexus.sigtrans.com.br/repository/npm-releases/"
