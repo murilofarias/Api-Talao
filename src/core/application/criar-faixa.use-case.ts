@@ -8,7 +8,6 @@ export class CriarFaixaUseCase{
 
     async execute(input: CriarFaixaInput): Promise<CriarFaixaOutput>{
 
-        console.log(input.idTenant)
         
         const faixasTenantAtivas = await this.faixaRepository.find({
             where: {
@@ -16,8 +15,6 @@ export class CriarFaixaUseCase{
                 ativa: true
             }
         });
-
-        console.log(faixasTenantAtivas)
 
         if(!faixasTenantAtivas.every(faixa => faixa.prefixo !== input.prefixo))
             throw new DomainError("Tenant must have different prefixes for active bands!")

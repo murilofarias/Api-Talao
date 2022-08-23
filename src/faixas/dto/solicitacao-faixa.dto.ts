@@ -19,8 +19,4 @@ export class SolicitacaoFaixa{
     @IsInt()
     tipo:number;
 
-    @ApiProperty()
-    @IsUUID()
-    id_tenant: string;
-
 }

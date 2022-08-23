@@ -15,7 +15,8 @@ export class FaixasService {
       ) {}
 
 
-    async  monitorarTaloes(skip: number, take: number, tipo:number, user_name: string, tenant_id: string, equipment: string,ticketNumber: string, date: Date ) {
+    async  monitorarTaloes(skip: number, take: number, tipo:number,
+       user_name: string, tenant_id: string, equipment: string,ticketNumber: string, start_date: Date, end_date:Date ) {
         const monitorarTaloesUseCase = await this.monitorarTaloesUseCase.execute(
             {
                 skip: skip,
@@ -25,7 +26,8 @@ export class FaixasService {
                 tenantId: tenant_id,
                 equipment: equipment,
                 ticketNumber: ticketNumber,
-                date: date
+                startDate: start_date,
+                endDate: end_date
             });
 
 
@@ -50,14 +52,14 @@ export class FaixasService {
     }
 
 
-    async solicitarFaixa(solicitacaoFaixa) {
+    async solicitarFaixa(solicitacaoFaixa, tenantId: string) {
         const criarFaixaUseCaseResponse = await this.criarFaixaUseCase.execute(
           {
             numeroInicial: solicitacaoFaixa.numero_inicial,
             numeroFinal: solicitacaoFaixa.numero_final,
             prefixo: solicitacaoFaixa.prefixo,
             tipo: solicitacaoFaixa.tipo,
-            idTenant: solicitacaoFaixa.id_tenant
+            idTenant: tenantId
           });
     
         return criarFaixaUseCaseResponse.faixa;

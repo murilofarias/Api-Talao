@@ -34,10 +34,14 @@ export class FaixaRepository implements FaixaRepositoryInterface{
             query = query
                 .andWhere('talao.identificador = :identificator', { identificator: options.ticketNumber})
                 
-
-        if(options.date)
+        
+        if(options.startDate)
             query = query
-                .andWhere('talao.date like :date', { identificator: options.date})
+                .andWhere('talao.dataLiberacao > :startDate', { startDate: options.startDate})
+
+        if(options.endDate)
+            query = query
+                .andWhere('talao.dataLiberacao < :endDate', {endDate: options.endDate})
         
         if(options.userName)
             query = query

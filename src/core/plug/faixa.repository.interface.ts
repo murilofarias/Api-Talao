@@ -18,7 +18,8 @@ export interface MonitoramentoTaloesOptions{
     tenantId: string,
     equipment: string,
     ticketNumber: string,
-    date: Date
+    startDate: Date,
+    endDate: Date
 }
 
 export interface TalaoPage{

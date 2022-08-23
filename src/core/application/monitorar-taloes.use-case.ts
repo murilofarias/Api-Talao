@@ -15,7 +15,8 @@ export class MonitorarTaloesUseCase {
       tenantId: input.tenantId,
       equipment: input.equipment,
       ticketNumber: input.ticketNumber,
-      date: input.date
+      startDate: input.startDate,
+      endDate: input.endDate
     });
 
 
@@ -35,7 +36,8 @@ type MonitorarTaloesInput = {
   tenantId: string,
   equipment: string,
   ticketNumber:string,
-  date: Date
+  startDate: Date,
+  endDate: Date
 };
 
 type MonitorarTaloesOutput = {
