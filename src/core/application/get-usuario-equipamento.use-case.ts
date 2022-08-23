@@ -1,15 +1,16 @@
-
-//não services do Nest.js - casos de uso vão ser o service
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { EquipamentoSchema } from "src/infra/db/typeorm/equipamento.schema";
 import { UsuarioEquipamentoSchema } from "src/infra/db/typeorm/usuario-equipamento.schema";
 import { UsuarioSchema } from "src/infra/db/typeorm/usuario.schema";
 import { Repository } from "typeorm";
+import { DomainError } from "../domain/errors/domain.error";
+import { ResourceNotFoundError } from "../domain/errors/resource-not-found.error";
+
 import { UsuarioEquipamento } from "../domain/usuario-equipamento";
 
 @Injectable()
-export class ChecarUsuarioEquipamentoUseCase {
+export class GetUsuarioEquipamentoUseCase {
     constructor(
         @InjectRepository(UsuarioEquipamentoSchema)
         private usuarioEquipamentoRepository: Repository<UsuarioEquipamentoSchema>,
@@ -20,48 +21,44 @@ export class ChecarUsuarioEquipamentoUseCase {
       ) {}
 
   async execute(input: ChecarUsuarioEquipamentoInput): Promise<ChecarUsuarioEquipamentoOutput> {
-    const mensagensErro : string[] = [];
     const usuarioSchema = await this.usuarioRepository.findOneBy({
         id: input.usuarioId
     })
     if(!usuarioSchema)
-        mensagensErro.push("Usuário inexistente");
+        throw new ResourceNotFoundError("User must exist");
 
     const equipamentoSchema = await this.equipamentoRepository.findOneBy({
         id: input.equipamentoId
     })
     if(!equipamentoSchema)
-        mensagensErro.push("Equipamento inexistente");
+        throw new ResourceNotFoundError("Equipment must exist");
     
-    //Nao é necessário checar o relacionamento usuario equipamento se algum deles nao existe.
-    if(mensagensErro.length > 0 )
-        return this.gerarResposta(mensagensErro);
+    
 
     const usuarioEquipamentoSchema = await this.usuarioEquipamentoRepository.findOneBy({
         usuario: usuarioSchema,
         equipamento: equipamentoSchema
     })
-
+    
     if(!usuarioEquipamentoSchema)
-        mensagensErro.push("Usuário não associado com Equipamento");
-    else
-        if(!usuarioEquipamentoSchema.ativa)
-            mensagensErro.push("Associação do usuário com o equipamento não está mais ativa");
+        throw new DomainError ("User must be associated with equipment");
 
-    const usuarioEquipamento = usuarioEquipamentoSchema;
-    usuarioEquipamento.usuario = usuarioSchema;
-    usuarioEquipamento.equipamento = equipamentoSchema;
+    if(!usuarioEquipamentoSchema.ativa)
+        throw new DomainError("Association between user and equipment must be active");
 
-    return this.gerarResposta(mensagensErro, usuarioEquipamentoSchema);
-  }
+    const usuarioEquipamento : UsuarioEquipamento = {
+        ativa: usuarioEquipamentoSchema.ativa,
+        id: usuarioEquipamentoSchema.id,
+        usuario: usuarioSchema,
+        equipamento: equipamentoSchema
+    }
 
 
-  gerarResposta(mensagensErro: string[], usuarioEquipamento =null){
     return {
-        mensagemErro: mensagensErro.join(", "),
         usuarioEquipamento: usuarioEquipamento
-    };
+    }
   }
+
 }
 
 type ChecarUsuarioEquipamentoInput = {
@@ -70,6 +67,5 @@ type ChecarUsuarioEquipamentoInput = {
 };
 
 type ChecarUsuarioEquipamentoOutput = {
-    mensagemErro: string,
     usuarioEquipamento: UsuarioEquipamento
 };

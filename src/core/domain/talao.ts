@@ -5,19 +5,22 @@ import { Faixa } from "./faixa";
 import { SituacaoTalao } from "./enum/situacao-talao";
 
 
-export class Talao {
-    constructor(faixa: Faixa, usuario: Usuario, equipamento: Equipamento, prefixo: string, numero: string, id :string = null){
+export class Ticket {
+    constructor(faixa: Faixa, usuario: Usuario, equipamento: Equipamento, numero: string, vinculado = false, id = ""){
 
-        if(id)
+        if(id.length >  0)
             this.id = id;
             
         this.faixa = faixa;
-        this._usuario = usuario;
+        this._requestedBy = usuario;
         this._equipamento = equipamento;
-        this._identificador = prefixo + numero.padStart(10 - prefixo.length, "0" );
+        this.vinculado = vinculado;
+        this._identificador = faixa.prefixo + numero.padStart(10 - faixa.prefixo.length, "0" );
         this._situacao = SituacaoTalao.Liberado;
         this._dataLiberacao = new Date();
     }
+
+    
 
     marcarUtilizado(){
         this._situacao = SituacaoTalao.Utilizado
@@ -27,6 +30,8 @@ export class Talao {
 
     readonly faixa : Faixa;
 
+    readonly vinculado: boolean;
+
     private _identificador : string;
 
     get identificador(){
@@ -34,10 +39,10 @@ export class Talao {
     }
          
 
-    private _usuario: Usuario;
+    private _requestedBy: Usuario;
 
-    get usuario(){
-        return this._usuario;
+    get requestedBy(){
+        return this._requestedBy;
     }
 
     private _equipamento: Equipamento;

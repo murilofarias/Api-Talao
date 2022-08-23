@@ -1,11 +1,11 @@
 
 import { TipoRegistro } from "./enum/tipo-registro";
-import { Talao } from "./talao";
+import { Ticket } from "./talao";
 import { UsuarioEquipamento } from "./usuario-equipamento";
 
 export class Faixa{
-    constructor(idTenant, numInicial, numFinal, prefixo, tipoRegistro, id:string = null, proximo:number =  null){
-        if(id)
+    constructor(idTenant, numInicial, numFinal, prefixo, tipoRegistro, id = "", proximo = -1){
+        if(id.length > 0)
             this.id = id;
 
 
@@ -23,7 +23,7 @@ export class Faixa{
 
         this._numInicial = numInicial;
 
-        this._proximo = proximo === null ? numInicial : proximo;
+        this._proximo = proximo === -1 ? numInicial : proximo;
 
         this._numFinal = numFinal;
 
@@ -44,37 +44,37 @@ export class Faixa{
     
     estender(novoNumFinal: number){
         if(Number.isInteger(novoNumFinal)){
-            throw new Error("Novo numero final deve ser um inteiro");
+            throw new Error("New final number must be an integer");
         }
 
         if(novoNumFinal <= this._numFinal){
-            throw new Error("Novo numero final deve ser maior que o final atual");
+            throw new Error("New final number must be greater than current one");
         }
 
         this._numFinal = novoNumFinal;
     }
 
-    liberarTaloes(usuarioEquipamento : UsuarioEquipamento, quantidade: number, liberarSomenteAoAgente = true): Talao[]{
+    liberarTaloes(usuarioEquipamento : UsuarioEquipamento, quantidade: number, vinculado = true): Ticket[]{
+        
         if(!Number.isInteger(quantidade)){
-            throw new Error("A quantidade de Taloes deve ser um inteiro");
+            throw new Error("Quantity must be a integer");
         }
 
         if(this._numFinal === this._numInicial)
-            throw new Error("A quantidade de Taloes para essa faixa acabou. Pode-se estender a faixa caso precise");
+            throw new Error("There is no available identifier number for this band");
 
         if(!usuarioEquipamento.ativa)
-            throw new Error("A relação entre equipamento e agente não está ativa");
+            throw new Error("Association between user and equipment must be active");
 
-        
-        const taloes : Talao[]= [];
 
         const maiorNumeroLiberadoPedido = (this._proximo + quantidade -1 );
 
         //Se o maior numero a ser liberado pelo pedido ultrapassa o numero final, só é liberado até o número final
         const maiorNumeroLiberado = maiorNumeroLiberadoPedido <= this._numFinal ? maiorNumeroLiberadoPedido: this._numFinal;
-        const agenteAlvo = liberarSomenteAoAgente ? usuarioEquipamento.usuario : null;
+
+        const taloes : Ticket[]= [];
         for(let numeroTalao = this._proximo; numeroTalao <= maiorNumeroLiberado; numeroTalao++){
-            const talao = new Talao(this, agenteAlvo, usuarioEquipamento.equipamento, this.prefixo, numeroTalao.toString())
+            const talao = new Ticket(this, usuarioEquipamento.usuario, usuarioEquipamento.equipamento, numeroTalao.toString(), vinculado)
             taloes.push(talao);
         }
 
