@@ -1,14 +1,33 @@
-import { Injectable } from '@nestjs/common';
-import { CriarFaixaUseCase } from 'src/core/application/criar-faixa.use-case';
-import { LiberarTaloesUseCase } from 'src/core/application/liberar-taloes.use-case';
+import { Injectable } from "@nestjs/common";
+import { CriarFaixaUseCase } from "src/core/application/criar-faixa.use-case";
+import { LiberarTaloesUseCase } from "src/core/application/liberar-taloes.use-case";
+import { MonitorarTaloesUseCase } from "src/core/application/monitorar-taloes.use-case";
+
+
 
 @Injectable()
 export class FaixasService {
+
     constructor(
         private liberarTaloesUseCase: LiberarTaloesUseCase,
-        private criarFaixaUseCase: CriarFaixaUseCase
+        private criarFaixaUseCase: CriarFaixaUseCase,
+        private monitorarTaloesUseCase: MonitorarTaloesUseCase
       ) {}
 
+
+    async  monitorarTaloes(skip: number, take: number, tipo:number, user_name: string, tenant_id: string) {
+        const monitorarTaloesUseCase = await this.monitorarTaloesUseCase.execute(
+            {
+                skip: skip,
+                take: take,
+                tipo: tipo,
+                usuarioName:user_name,
+                tenantId: tenant_id
+            });
+
+
+            return monitorarTaloesUseCase.taloes;
+    }
 
     async solicitarAutoTalao(usuarioId, equipamentoId, quantidade, tipo, vinculado){
         

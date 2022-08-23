@@ -3,6 +3,7 @@ import { getDataSourceToken, TypeOrmModule } from '@nestjs/typeorm';
 import { CriarFaixaUseCase } from 'src/core/application/criar-faixa.use-case';
 import { GetUsuarioEquipamentoUseCase } from 'src/core/application/get-usuario-equipamento.use-case';
 import { LiberarTaloesUseCase } from 'src/core/application/liberar-taloes.use-case';
+import { MonitorarTaloesUseCase } from 'src/core/application/monitorar-taloes.use-case';
 import { FaixaRepositoryInterface } from 'src/core/plug/faixa.repository.interface';
 import { EquipamentoSchema } from 'src/infra/db/typeorm/equipamento.schema';
 import { FaixaRepository } from 'src/infra/db/typeorm/faixa.repository';
@@ -29,7 +30,7 @@ import { FaixasService } from './faixas.service';
         {
           provide: FaixaRepository,
           useFactory: (dataSource: DataSource) => {
-            return new FaixaRepository(dataSource.getRepository(FaixaSchema), dataSource.getRepository(TalaoSchema));
+            return new FaixaRepository(dataSource.getRepository(FaixaSchema), dataSource.getRepository(TalaoSchema), dataSource);
           },
           inject: [getDataSourceToken()],
         },
@@ -46,7 +47,14 @@ import { FaixasService } from './faixas.service';
             return new CriarFaixaUseCase(faixaRepo);
           },
           inject: [FaixaRepository],
-        }
+        },
+        { 
+          provide: MonitorarTaloesUseCase,
+          useFactory: (faixaRepo: FaixaRepositoryInterface) => {
+            return new MonitorarTaloesUseCase(faixaRepo);
+          },
+          inject: [FaixaRepository],
+        },
       ],
     controllers: [FaixasController],
 })
