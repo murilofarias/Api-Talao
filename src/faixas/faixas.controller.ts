@@ -3,7 +3,10 @@ import { MonitoramentoTaloesDto } from './dto/monitoramento-taloes.dto';
 import { SolicitacaoAutoDto } from './dto/solicitacao-auto-taloes.dto';
 import { SolicitacaoFaixa } from './dto/solicitacao-faixa.dto';
 import { FaixasService } from './faixas.service';
+import { ApiTags } from '@nestjs/swagger';
 
+
+@ApiTags('bands')
 @Controller('bands')
 export class FaixasController {
     constructor(private faixasService: FaixasService) {}
