@@ -15,7 +15,10 @@ export interface MonitoramentoTaloesOptions{
     skip: number;
     tipo: number
     userName: string
-    tenantId: string
+    tenantId: string,
+    equipment: string,
+    ticketNumber: string,
+    date: Date
 }
 
 export interface TalaoPage{
@@ -29,9 +32,10 @@ interface Meta{
 
 export interface DataTalao{
     id?: number
-    username?: string
-    ticketNumber: string
+    user_name?: string
+    ticket_number: string
     equipment: string
     date: Date
-    status: number
+    status: number,
+    attached: boolean
 }

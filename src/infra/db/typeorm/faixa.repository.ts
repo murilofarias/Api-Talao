@@ -23,18 +23,29 @@ export class FaixaRepository implements FaixaRepositoryInterface{
             .createQueryBuilder()
             .select("talao")
             .from(TalaoSchema, "talao")
-            .leftJoinAndSelect('talao.usuario', 'usuario')
+            .leftJoinAndSelect('talao.requestedBy', 'usuario')
             .leftJoinAndSelect('talao.equipamento', 'equipamento')
             .leftJoinAndSelect('talao.faixa', 'faixa')
             .where('faixa.tipoRegistro = :tipo', { tipo: options.tipo })
+            .andWhere('faixa.ativa = :ativa', { ativa: true })
             .andWhere('faixa.idTenant = :tenant', { tenant: options.tenantId })
 
+        if(options.ticketNumber)
+            query = query
+                .andWhere('talao.identificador = :identificator', { identificator: options.ticketNumber})
+                
+
+        if(options.date)
+            query = query
+                .andWhere('talao.date like :date', { identificator: options.date})
+        
         if(options.userName)
             query = query
-                .andWhere('usuario.nome like :nome', { nome: `%${options.userName}%`})    
-        else
+                .andWhere('usuario.nome like :nome', { nome: `%${options.userName}%`})
+
+        if(options.equipment)
             query = query
-                .andWhere('faixa.tipoRegistro = :tipo', { tipo: options.tipo })
+                .andWhere('equipamento.alias like :alias', { alias: `%${options.equipment}%`})
 
         
         const [result, total] =  await query
@@ -45,11 +56,12 @@ export class FaixaRepository implements FaixaRepositoryInterface{
 
         const talaoData: DataTalao[] = result.map(talaoSchema => {
             return {
-                username: talaoSchema.requestedBy ? talaoSchema.requestedBy.nome: null,
-                ticketNumber: talaoSchema.identificador,
-                equipment: talaoSchema.equipamento.imei,
+                user_name: talaoSchema.requestedBy ? talaoSchema.requestedBy.nome: null,
+                ticket_number: talaoSchema.identificador,
+                equipment: talaoSchema.equipamento ? talaoSchema.equipamento.alias: null,
                 date: talaoSchema.dataLiberacao,
-                status: talaoSchema.situacao
+                status: talaoSchema.situacao,
+                attached: talaoSchema.vinculado
             }
         });
 

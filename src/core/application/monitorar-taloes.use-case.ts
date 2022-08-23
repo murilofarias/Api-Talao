@@ -8,12 +8,15 @@ export class MonitorarTaloesUseCase {
   async execute(input: MonitorarTaloesInput): Promise<MonitorarTaloesOutput> {
 
     const taloes = await this.faixaRepository.findTaloes({
-            take: input.take,
-            skip: input.skip,
-            tipo: input.tipo,
-            userName: input.usuarioName,
-            tenantId: input.tenantId
-        });
+      take: input.take,
+      skip: input.skip,
+      tipo: input.tipo,
+      userName: input.usuarioName,
+      tenantId: input.tenantId,
+      equipment: input.equipment,
+      ticketNumber: input.ticketNumber,
+      date: input.date
+    });
 
 
     return {
@@ -29,7 +32,10 @@ type MonitorarTaloesInput = {
   skip: number,
   tipo: number,
   usuarioName: string,
-  tenantId: string
+  tenantId: string,
+  equipment: string,
+  ticketNumber:string,
+  date: Date
 };
 
 type MonitorarTaloesOutput = {

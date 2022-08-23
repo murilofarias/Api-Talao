@@ -7,8 +7,10 @@ export class EquipamentoSchema{
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  imei:string;
+  @Column({
+    unique: true
+  })
+  alias:string;
 
   @OneToMany(() => UsuarioEquipamentoSchema, (usuarioEquipamento) => usuarioEquipamento.equipamento)
   equipamentoUsuarios: UsuarioEquipamentoSchema[];

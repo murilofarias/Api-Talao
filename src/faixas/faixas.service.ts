@@ -15,14 +15,17 @@ export class FaixasService {
       ) {}
 
 
-    async  monitorarTaloes(skip: number, take: number, tipo:number, user_name: string, tenant_id: string) {
+    async  monitorarTaloes(skip: number, take: number, tipo:number, user_name: string, tenant_id: string, equipment: string,ticketNumber: string, date: Date ) {
         const monitorarTaloesUseCase = await this.monitorarTaloesUseCase.execute(
             {
                 skip: skip,
                 take: take,
                 tipo: tipo,
                 usuarioName:user_name,
-                tenantId: tenant_id
+                tenantId: tenant_id,
+                equipment: equipment,
+                ticketNumber: ticketNumber,
+                date: date
             });
 
 
