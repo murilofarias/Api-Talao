@@ -6,18 +6,19 @@ import { FaixasModule } from './faixas/faixas.module';
 import { EquipamentoSchema } from './infra/db/typeorm/equipamento.schema';
 import { UsuarioEquipamentoSchema } from './infra/db/typeorm/usuario-equipamento.schema';
 import { UsuarioSchema } from './infra/db/typeorm/usuario.schema';
+import { ConfigModule } from '@nestjs/config';
+import { config } from './config';
+import { DatabaseConfig } from './database.config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'admin',
-      password: 'admin',
-      database: 'helios-talao',
-      autoLoadEntities: true,
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load : [config]
+}),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useClass: DatabaseConfig
     }),
     FaixasModule,
     TypeOrmModule.forFeature([UsuarioEquipamentoSchema]),
