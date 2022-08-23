@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Equipamento } from './@core/domain/equipamento';
-import { Usuario } from './@core/domain/usuario';
+import { Equipamento } from './core/domain/equipamento';
+import { Usuario } from './core/domain/usuario';
 import { EquipamentoSchema } from './infra/db/typeorm/equipamento.schema';
 import { UsuarioEquipamentoSchema } from './infra/db/typeorm/usuario-equipamento.schema';
 import { UsuarioSchema } from './infra/db/typeorm/usuario.schema';

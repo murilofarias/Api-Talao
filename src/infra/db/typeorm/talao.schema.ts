@@ -18,11 +18,14 @@ export class TalaoSchema {
   @Column()
   dataLiberacao: Date;
 
+  @Column()
+  vinculado:boolean;
+
   @ManyToOne(() => EquipamentoSchema, (equipamento) => equipamento.taloes)
   equipamento: EquipamentoSchema;
 
   @ManyToOne(() => UsuarioSchema, (usuario) => usuario.taloes)
-  usuario: UsuarioSchema;
+  requestedBy: UsuarioSchema;
 
   @ManyToOne(() => FaixaSchema, (faixa) => faixa.taloes)
   faixa: FaixaSchema

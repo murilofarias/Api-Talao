@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { getDataSourceToken, TypeOrmModule } from '@nestjs/typeorm';
-import { ChecarUsuarioEquipamentoUseCase } from 'src/@core/application/checar-usuario-equipamento.use-case';
-import { CriarFaixaUseCase } from 'src/@core/application/criar-faixa.use-case';
-import { LiberarTaloesUseCase } from 'src/@core/application/liberar-taloes.use-case';
-import { FaixaRepositoryInterface } from 'src/@core/plug/faixa.repository.interface';
+import { CriarFaixaUseCase } from 'src/core/application/criar-faixa.use-case';
+import { GetUsuarioEquipamentoUseCase } from 'src/core/application/get-usuario-equipamento.use-case';
+import { LiberarTaloesUseCase } from 'src/core/application/liberar-taloes.use-case';
+import { FaixaRepositoryInterface } from 'src/core/plug/faixa.repository.interface';
 import { EquipamentoSchema } from 'src/infra/db/typeorm/equipamento.schema';
 import { FaixaRepository } from 'src/infra/db/typeorm/faixa.repository';
 import { FaixaSchema } from 'src/infra/db/typeorm/faixa.schema';
@@ -25,7 +25,7 @@ import { FaixasService } from './faixas.service';
     providers: [
         FaixasService,
         CriarFaixaUseCase,
-        ChecarUsuarioEquipamentoUseCase,
+        GetUsuarioEquipamentoUseCase,
         {
           provide: FaixaRepository,
           useFactory: (dataSource: DataSource) => {
@@ -35,10 +35,10 @@ import { FaixasService } from './faixas.service';
         },
         { 
           provide: LiberarTaloesUseCase,
-          useFactory: (faixaRepo: FaixaRepositoryInterface) => {
-            return new LiberarTaloesUseCase(faixaRepo);
+          useFactory: (faixaRepo: FaixaRepositoryInterface, getUserEqui: GetUsuarioEquipamentoUseCase) => {
+            return new LiberarTaloesUseCase(faixaRepo, getUserEqui);
           },
-          inject: [FaixaRepository],
+          inject: [FaixaRepository, GetUsuarioEquipamentoUseCase],
         },
         { 
           provide: CriarFaixaUseCase,

@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Faixa } from "src/@core/domain/faixa";
-import { Talao } from "src/@core/domain/talao";
+import { Faixa } from "src/core/domain/faixa";
+import { Ticket } from "src/core/domain/talao";
 
-import { FaixaRepositoryInterface } from "src/@core/plug/faixa.repository.interface";
+import { FaixaRepositoryInterface } from "src/core/plug/faixa.repository.interface";
 import { Repository } from 'typeorm';
 import { FaixaSchema } from "./faixa.schema";
 import { TalaoSchema } from "./talao.schema";
@@ -28,25 +28,32 @@ export class FaixaRepository implements FaixaRepositoryInterface{
             faixasSchema.proximo))
     }
 
-    async findOneBy(condicoes) : Promise<Faixa>{
+    async findOneBy(condicoes) : Promise<Faixa | null>{
 
         const faixaSchema = await this.faixaRepository.findOneBy(condicoes)
+    
 
-        return new Faixa(faixaSchema.idTenant, faixaSchema.numInicial, faixaSchema.numFinal, faixaSchema.prefixo, faixaSchema.tipoRegistro, faixaSchema.id, faixaSchema.proximo)
+        return faixaSchema !== null? new Faixa(
+            faixaSchema.idTenant,
+            faixaSchema.numInicial,
+            faixaSchema.numFinal,
+            faixaSchema.prefixo,
+            faixaSchema.tipoRegistro,
+            faixaSchema.id,
+            faixaSchema.proximo
+        ) : null
          
 
     }
     
-    save(faixa:Faixa){
+    save(faixa:Faixa, taloes: Ticket[] = []){
         const faixaSchema = this.faixaRepository.create(faixa);
+        if(taloes.length > 0 ){
+            const taloesSchema = this.talaoRepository.create(taloes);
+            this.talaoRepository.save(taloesSchema);
+        }
         return this.faixaRepository.save(faixaSchema) ;
     }
 
-    saveTaloes(faixa: Faixa, taloes: Talao[]){
-        const faixaSchema = this.faixaRepository.create(faixa);
-        const taloesSchema = this.talaoRepository.create(taloes);
-        this.faixaRepository.save(faixaSchema);
-        return this.talaoRepository.save(taloesSchema) ;
-    }
 }
 

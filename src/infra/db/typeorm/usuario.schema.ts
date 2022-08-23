@@ -19,7 +19,7 @@ export class UsuarioSchema {
   @OneToMany(() => UsuarioEquipamentoSchema, (usuarioEquipamento) => usuarioEquipamento.usuario)
   usuarioEquipamentos: UsuarioEquipamentoSchema[];
 
-  @OneToMany(() => TalaoSchema, (talao) => talao.usuario)
+  @OneToMany(() => TalaoSchema, (talao) => talao.requestedBy)
   taloes : TalaoSchema[];
 
 
