@@ -4,23 +4,23 @@ import { SolicitacaoAutoDto } from './dto/solicitacao-auto-taloes.dto';
 import { SolicitacaoFaixa } from './dto/solicitacao-faixa.dto';
 import { FaixasService } from './faixas.service';
 
-@Controller('faixas')
+@Controller('bands')
 export class FaixasController {
     constructor(private faixasService: FaixasService) {}
 
 
-    @Post("/solicitar")
+    @Post("/request")
     async solicitarFaixa(
       @Body(new ValidationPipe()) solicitacaoFaixa: SolicitacaoFaixa) {
       return await this.faixasService.solicitarFaixa(solicitacaoFaixa)
   }
 
-    @Post("/:tipo/solicitar-automatico/taloes")
+    @Post("/:type/auto-request/tickets")
     async solicitarAutoTalao(
         @Body(new ValidationPipe()) solicitacaoAutoDto: SolicitacaoAutoDto,
-        @Query('quantidade', new DefaultValuePipe(50), ParseIntPipe) quantidade: number,
-        @Param('tipo', ParseIntPipe) tipo: number,
-        @Query('vinculado', new DefaultValuePipe(false), ParseBoolPipe) vinculado: boolean
+        @Param('type', ParseIntPipe) tipo: number,
+        @Query('quantity', new DefaultValuePipe(50), ParseIntPipe) quantidade: number,
+        @Query('attach', new DefaultValuePipe(false), ParseBoolPipe) vinculado: boolean
         ) {
 
         return (await this.faixasService.solicitarAutoTalao(
@@ -31,10 +31,10 @@ export class FaixasController {
             vinculado)).map( talao => talao.identificador);
     }
 
-    @Get("/:tipo/taloes")
+    @Get("/:type/tickets")
     async monitorarTaloes(
         @Body(new ValidationPipe()) monitoramentoTalaoDto: MonitoramentoTaloesDto,
-        @Param('tipo', ParseIntPipe) tipo: number,
+        @Param('type', ParseIntPipe) tipo: number,
         @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
         @Query('take', new DefaultValuePipe(10), ParseIntPipe) take: number) {
         
@@ -44,7 +44,10 @@ export class FaixasController {
             take,
             tipo,
             monitoramentoTalaoDto.user_name,
-            monitoramentoTalaoDto.tenant_id
+            monitoramentoTalaoDto.tenant_id,
+            monitoramentoTalaoDto.equipment,
+            monitoramentoTalaoDto.ticket_number,
+            monitoramentoTalaoDto.released_date
         )
     }
 
