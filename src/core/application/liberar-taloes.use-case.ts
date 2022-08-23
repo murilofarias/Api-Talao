@@ -18,7 +18,8 @@ export class LiberarTaloesUseCase {
 
     const faixa = await this.faixaRepository.findOneBy({
         tipoRegistro: input.tipo,
-        ativa: true
+        ativa: true,
+        idTenant: input.tenantId
     })
 
     if(!faixa)
@@ -43,7 +44,8 @@ type liberarTaloesInput = {
   quantidade: number,
   vinculado: boolean,
   usuarioId: string,
-  equipamentoId: string
+  equipamentoId: string,
+  tenantId: string
 };
 
 type liberarTaloesOutput = {

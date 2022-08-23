@@ -12,4 +12,8 @@ export class SolicitacaoAutoDto{
     equipamento_id: string;
 
 
+    @ApiProperty()
+    @IsUUID()
+    tenant_id:string;
+
 }

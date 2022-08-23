@@ -32,12 +32,13 @@ export class FaixasService {
             return monitorarTaloesUseCase.taloes;
     }
 
-    async solicitarAutoTalao(usuarioId, equipamentoId, quantidade, tipo, vinculado){
+    async solicitarAutoTalao(usuarioId, equipamentoId, tenantId, quantidade, tipo, vinculado){
         
         
         const liberarTalaoUseCaseResponse = await this.liberarTaloesUseCase.execute(
             {
                 tipo: tipo,
+                tenantId: tenantId,
                 quantidade: quantidade,
                 vinculado: vinculado,
                 usuarioId: usuarioId,

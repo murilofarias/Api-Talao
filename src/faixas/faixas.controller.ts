@@ -29,6 +29,7 @@ export class FaixasController {
         return (await this.faixasService.solicitarAutoTalao(
             solicitacaoAutoDto.usuario_id,
             solicitacaoAutoDto.equipamento_id,
+            solicitacaoAutoDto.tenant_id,
             quantidade,
             tipo,
             vinculado)).map( talao => talao.identificador);
