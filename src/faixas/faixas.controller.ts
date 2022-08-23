@@ -15,7 +15,7 @@ export class FaixasController {
         description: "Tenant's id",
         required: true
     })
-    @Post("/request")
+    @Post("/")
     async solicitarFaixa(
       @Body(new ValidationPipe()) solicitacaoFaixa: SolicitacaoFaixa,
       @Headers('tenant-id') tenant_id: string) {
@@ -106,11 +106,6 @@ export class FaixasController {
         @Query('ticket-number', new DefaultValuePipe("")) ticket_number?: string) {
         
         
-        /*
-        "usuario_id": "2e0fe605-338c-4c1a-ad88-0795783a236c",
-        "equipamento_id": "bfa68bf9-8def-4865-8a4d-819119d87c75",
-        "tenant_id": "2e0fe605-338c-4c1a-ad88-079578f8236c"
-        */
         return (await this.faixasService).monitorarTaloes(
             skip,
             take,
