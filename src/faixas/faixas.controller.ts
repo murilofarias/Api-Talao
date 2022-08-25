@@ -2,7 +2,9 @@ import { Body, Headers, Controller, DefaultValuePipe, Get, Param, ParseBoolPipe,
 import { AutoRequestDto } from './dto/auto-request.dto';
 import { BandRequestDto } from './dto/band-request.dto';
 import { FaixasService } from './faixas.service';
-import { ApiTags, ApiQuery, ApiHeader } from '@nestjs/swagger';
+import { ApiTags, ApiQuery, ApiHeader, ApiOperation, ApiResponse, ApiForbiddenResponse } from '@nestjs/swagger';
+import { BandDto } from './dto/band.dto';
+import { BandsPage, TalaoPage } from 'src/core/plug/faixa.repository.interface';
 
 
 @ApiTags('bands')
@@ -15,11 +17,24 @@ export class FaixasController {
       description: "Tenant's id",
       required: true
   })
+  @ApiOperation({ summary: 'Requests a new band for the given tenant' })
+  @ApiResponse({ status: 201, description: 'Band created!', type: BandDto})
+  @ApiForbiddenResponse({ description: 'Response given when a command tries to break a domain rule'})
   @Post("/")
   async requestBand(
     @Body(new ValidationPipe()) solicitacaoFaixa: BandRequestDto,
-    @Headers('tenant_id') tenant_id: string) {
-    return await this.faixasService.solicitarFaixa(solicitacaoFaixa, tenant_id)
+    @Headers('tenant_id') tenant_id: string): Promise<BandDto> {
+    const faixa = await this.faixasService.solicitarFaixa(solicitacaoFaixa, tenant_id)
+
+    return {
+      id: faixa.id,
+      initial_number: faixa.numInicial,
+      final_number: faixa.numFinal,
+      next_number: faixa.proximo,
+      preffix: faixa.prefixo,
+      type: faixa.tipoRegistro,
+      active: faixa.ativa
+    }
   }
 
 
@@ -41,6 +56,8 @@ export class FaixasController {
     description: "It marks if the bands returned must be active or not. If false, gives all bands. If true, gives only the active ones.",
     required: false
 })
+@ApiOperation({ summary: 'Get Bands from a given tenant' })
+@ApiResponse({ status: 200, description: 'Search was performed without problems', type: BandsPage})
   @Get("/")
   async getBands(
     @Headers('tenant_id') tenant_id: string,
@@ -69,6 +86,9 @@ export class FaixasController {
       description: "This parameter asserts If the tickets will be attached to the user who asked for them.",
       required: false
   })
+  @ApiOperation({ summary: 'Release Tickets from a given type of Band. It must have an active band for the given type!'})
+  @ApiResponse({ status: 201, description: 'Tickets Released', type: String, isArray: true})
+  @ApiForbiddenResponse({ description: 'Response given when a command tries to break a domain rule'})
   @Post("/:type/auto-request/tickets")
   async autoRequestTicket(
       @Body(new ValidationPipe()) autoRequestDto: AutoRequestDto,
@@ -133,6 +153,8 @@ export class FaixasController {
       description: "Identifier of the ticket. Example: TL00000001",
       required: false
     })
+  @ApiOperation({ summary: 'Get Tickets for a given type of active band.'})
+  @ApiResponse({ status: 200, description: 'Search was performed without problems', type: TalaoPage})
   @Get("/:type/tickets")
   async trackTickets(
       @Param('type', ParseIntPipe) type: number,

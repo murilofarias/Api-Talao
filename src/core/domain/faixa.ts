@@ -1,5 +1,6 @@
 
 import { TipoRegistro } from "./enum/tipo-registro";
+import { DomainError } from "./errors/domain.error";
 import { Ticket } from "./talao";
 import { UsuarioEquipamento } from "./usuario-equipamento";
 
@@ -10,15 +11,15 @@ export class Faixa{
 
 
         if(!Number.isInteger(numInicial)){
-            throw new Error("Numero inicial deve ser um inteiro");
+            throw new DomainError("Numero inicial deve ser um inteiro");
         }
 
         if(!Number.isInteger(numFinal)){
-            throw new Error("Numero final deve ser um inteiro");
+            throw new DomainError("Numero final deve ser um inteiro");
         }
 
         if( numInicial >= numFinal){
-            throw new Error("Numero final deve ser maior que inicial");
+            throw new DomainError("Numero final deve ser maior que inicial");
         }
 
         this._numInicial = numInicial;
@@ -44,11 +45,11 @@ export class Faixa{
     
     estender(novoNumFinal: number){
         if(Number.isInteger(novoNumFinal)){
-            throw new Error("New final number must be an integer");
+            throw new DomainError("New final number must be an integer");
         }
 
         if(novoNumFinal <= this._numFinal){
-            throw new Error("New final number must be greater than current one");
+            throw new DomainError("New final number must be greater than current one");
         }
 
         this._numFinal = novoNumFinal;
@@ -57,14 +58,14 @@ export class Faixa{
     liberarTaloes(usuarioEquipamento : UsuarioEquipamento, quantidade: number, vinculado = true): Ticket[]{
         
         if(!Number.isInteger(quantidade)){
-            throw new Error("Quantity must be a integer");
+            throw new DomainError("Quantity must be a integer");
         }
 
         if(this._numFinal === this._numInicial)
-            throw new Error("There is no available identifier number for this band");
+            throw new DomainError("There is no available identifier number for this band");
 
         if(!usuarioEquipamento.ativa)
-            throw new Error("Association between user and equipment must be active");
+            throw new DomainError("Association between user and equipment must be active");
 
 
         const maiorNumeroLiberadoPedido = (this._proximo + quantidade -1 );

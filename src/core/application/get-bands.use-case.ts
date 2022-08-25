@@ -1,4 +1,4 @@
-import { FaixaRepositoryInterface, Meta } from "../plug/faixa.repository.interface";
+import { BandsPage, FaixaRepositoryInterface, Meta } from "../plug/faixa.repository.interface";
 
 
 export class GetBandsUseCase{
@@ -48,19 +48,3 @@ type GetBandsInput = {
   type GetBandsOutput = {
       bandsPage: BandsPage;
   };
-
-  export interface BandsPage{
-    meta: Meta;
-    data: BandsData[];
-}
-
-export interface BandsData{
-    id : number,
-    preffix: string,
-    inicial_number: number,
-    final_number: number,
-    next_number: number,
-    active: boolean,
-    type: number,
-    tenant_id: string
-}

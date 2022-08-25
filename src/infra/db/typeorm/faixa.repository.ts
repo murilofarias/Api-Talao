@@ -77,7 +77,6 @@ export class FaixaRepository implements FaixaRepositoryInterface{
 
 
     async find(conditions) {
-        console.log(conditions.tenantId);
         let query: SelectQueryBuilder<FaixaSchema>= await this.dataSource
             .createQueryBuilder()
             .select("faixa")

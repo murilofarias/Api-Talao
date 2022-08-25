@@ -8,8 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Helios-api-Talao')
-    .setDescription('Api made to manage tickets')
+    .setTitle('Helios-Api-Talao')
+    .setDescription('Api to manage tickets')
     .setVersion('0.0.1')
     .build();
 
@@ -20,6 +20,6 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.useGlobalFilters(new DomainErrorFilter(), new ResourceNotFoundErrorFilter());
-  await app.listen(3000);
+  await app.listen(8080);
 }
 bootstrap();
