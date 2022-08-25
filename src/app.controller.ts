@@ -1,4 +1,4 @@
-import { Body, Controller, Param, ParseUUIDPipe, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from "@nestjs/common";
 import { AppService } from "./app.service";
 import { Equipamento } from "./core/domain/equipamento";
 import { Usuario } from "./core/domain/usuario";
@@ -22,5 +22,10 @@ export class AppController {
   @Post("/usuarios/:usuario_id/associar-equipamento/:equipamento_id")
   async associarUsuario(@Param('usuario_id', ParseUUIDPipe) usuario_id: string, @Param('equipamento_id', ParseUUIDPipe) equipamento_id: string ){
     return this.appService.associarUsuarioEquipamento(usuario_id, equipamento_id);
+  }
+
+  @Get("/health")
+  async getHealth(){
+    return {health : true};
   }
 }
