@@ -6,7 +6,7 @@ export interface FaixaRepositoryInterface{
     findTaloes(options: MonitoramentoTaloesOptions ): Promise<TalaoPage>;
     findOneBy(condicoes) : Promise<Faixa | null>; 
     save(faixa:Faixa, taloes?: Ticket[]);
-    find(condicoes): Promise<Faixa[]>;
+    find(condicoes);
     
 }
 
@@ -27,7 +27,7 @@ export interface TalaoPage{
     data: DataTalao[];
 }
 
-interface Meta{
+export interface Meta{
     total: number
 }
 

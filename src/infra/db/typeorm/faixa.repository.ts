@@ -76,16 +76,39 @@ export class FaixaRepository implements FaixaRepositoryInterface{
     }
 
 
-    async find(condicoes): Promise<Faixa[]> {
-        const faixasSchema = await this.faixaRepository.find(condicoes);
-        return faixasSchema.map(faixasSchema => new Faixa(
-            faixasSchema.idTenant, 
-            faixasSchema.numInicial, 
-            faixasSchema.numFinal, 
-            faixasSchema.prefixo,
-            faixasSchema.tipoRegistro,
-            faixasSchema.id,
-            faixasSchema.proximo))
+    async find(conditions) {
+        console.log(conditions.tenantId);
+        let query: SelectQueryBuilder<FaixaSchema>= await this.dataSource
+            .createQueryBuilder()
+            .select("faixa")
+            .from(FaixaSchema, "faixa")
+            .where("faixa.idTenant = :tenantId", { tenantId: conditions.tenantId })
+        
+        if(conditions.type !== -1)
+            query = query
+                .andWhere('faixa.tipoRegistro = :type', { type: conditions.type})
+
+        if(conditions.onlyActive)
+            query = query
+                .andWhere('faixa.ativa = :active', { active: true })
+        
+        const [result, total] =  await query
+            .getManyAndCount()
+        
+        
+        return [result.map(
+            faixasSchema => new Faixa
+                (
+                faixasSchema.idTenant, 
+                faixasSchema.numInicial, 
+                faixasSchema.numFinal, 
+                faixasSchema.prefixo,
+                faixasSchema.tipoRegistro,
+                faixasSchema.id,
+                faixasSchema.proximo
+                )
+            ),
+            total]
     }
 
     async findOneBy(condicoes) : Promise<Faixa | null>{
