@@ -1,22 +1,22 @@
 import { IsInt, IsUUID, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SolicitacaoFaixa{
+export class BandRequestDto{
 
     @ApiProperty()
     @IsInt()
-    numero_inicial: number;
+    initial_number: number;
 
     @ApiProperty()
     @IsInt()
-    numero_final: number;
+    final_number: number;
 
     @ApiProperty()
     @Length(1, 3)
-    prefixo: string;
+    preffix: string;
 
     @ApiProperty()
     @IsInt()
-    tipo:number;
+    type:number;
 
 }

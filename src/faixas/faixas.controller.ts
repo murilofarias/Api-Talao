@@ -1,6 +1,6 @@
 import { Body, Headers, Controller, DefaultValuePipe, Get, Param, ParseBoolPipe, ParseIntPipe, Post, Query, ValidationPipe, ParseUUIDPipe } from '@nestjs/common';
-import { SolicitacaoAutoDto } from './dto/solicitacao-auto-taloes.dto';
-import { SolicitacaoFaixa } from './dto/solicitacao-faixa.dto';
+import { AutoRequestDto } from './dto/auto-request.dto';
+import { BandRequestDto } from './dto/band-request.dto';
 import { FaixasService } from './faixas.service';
 import { ApiTags, ApiQuery, ApiHeader } from '@nestjs/swagger';
 
@@ -11,14 +11,14 @@ export class FaixasController {
     constructor(private faixasService: FaixasService) {}
 
   @ApiHeader({
-      name: "tenant-id",
+      name: "tenant_id",
       description: "Tenant's id",
       required: true
   })
   @Post("/")
-  async solicitarFaixa(
-    @Body(new ValidationPipe()) solicitacaoFaixa: SolicitacaoFaixa,
-    @Headers('tenant-id') tenant_id: string) {
+  async requestBand(
+    @Body(new ValidationPipe()) solicitacaoFaixa: BandRequestDto,
+    @Headers('tenant_id') tenant_id: string) {
     return await this.faixasService.solicitarFaixa(solicitacaoFaixa, tenant_id)
   }
 
@@ -53,7 +53,7 @@ export class FaixasController {
 
 
   @ApiHeader({
-      name: "tenant-id",
+      name: "tenant_id",
       description: "Tenant's id",
       required: true
   })
@@ -70,17 +70,17 @@ export class FaixasController {
       required: false
   })
   @Post("/:type/auto-request/tickets")
-  async solicitarAutoTalao(
-      @Body(new ValidationPipe()) solicitacaoAutoDto: SolicitacaoAutoDto,
+  async autoRequestTicket(
+      @Body(new ValidationPipe()) autoRequestDto: AutoRequestDto,
       @Param('type', ParseIntPipe) tipo: number,
-      @Headers('tenant-id') tenant_id: string,
+      @Headers('tenant_id') tenant_id: string,
       @Query('quantity', new DefaultValuePipe(50), ParseIntPipe) quantidade?: number,
       @Query('attach', new DefaultValuePipe(false), ParseBoolPipe) vinculado?: boolean
       ) {
 
       return (await this.faixasService.solicitarAutoTalao(
-          solicitacaoAutoDto.usuario_id,
-          solicitacaoAutoDto.equipamento_id,
+          autoRequestDto.user_id,
+          autoRequestDto.device_id,
           tenant_id,
           quantidade,
           tipo,
@@ -89,12 +89,22 @@ export class FaixasController {
 
 
   @ApiHeader({
-      name: "tenant-id",
+      name: "tenant_id",
       description: "Tenant's id",
       required: true
     })
+    @ApiQuery({
+      name: "skip",
+      type: Number,
+      required: false
+    })
+    @ApiQuery({
+      name: "take",
+      type: Number,
+      required: false
+    })
   @ApiQuery({
-      name: "user-name",
+      name: "user_name",
       type: String,
       description: "Name of the user who requested the ticket. Matches any name like the given one",
       required: false
@@ -106,34 +116,34 @@ export class FaixasController {
       required: false
     })
     @ApiQuery({
-      name: "released-date-start",
+      name: "released_start_date",
       type: Date,
       description: "Date when the tickets were released. Format : yyyy-mm-ddTHH:mm. You can give just part of it",
       required: false
     })
     @ApiQuery({
-      name: "released-date-end",
+      name: "released_end_date",
       type: Date,
       description: "Date when the tickets were released. Format : yyyy-mm-ddTHH:mm. You can give just part of it",
       required: false
     })
     @ApiQuery({
-      name: "ticket-number",
+      name: "ticket_number",
       type: String,
       description: "Identifier of the ticket. Example: TL00000001",
       required: false
     })
   @Get("/:type/tickets")
-  async monitorarTaloes(
+  async trackTickets(
       @Param('type', ParseIntPipe) type: number,
-      @Headers('tenant-id') tenant_id: string,
+      @Headers('tenant_id') tenant_id: string,
       @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
       @Query('take', new DefaultValuePipe(10), ParseIntPipe) take: number,
-      @Query('user-name', new DefaultValuePipe("")) user_name?: string,
+      @Query('user_name', new DefaultValuePipe("")) user_name?: string,
       @Query('equipment', new DefaultValuePipe("")) equipment?: string,
-      @Query('released-date-start') released_date_start?: Date,
-      @Query('released-date-end') released_date_end?: Date,
-      @Query('ticket-number', new DefaultValuePipe("")) ticket_number?: string) {
+      @Query('released_start_date') released_start_date?: Date,
+      @Query('released_end_date') released_end_date?: Date,
+      @Query('ticket_number', new DefaultValuePipe("")) ticket_number?: string) {
       
       
       return (await this.faixasService).monitorarTaloes(
@@ -144,8 +154,8 @@ export class FaixasController {
           tenant_id,
           equipment,
           ticket_number,
-          released_date_start ? new Date(released_date_start) : released_date_start,
-          released_date_end ? new Date(released_date_end) : released_date_end
+          released_start_date ? new Date(released_start_date) : released_start_date,
+          released_end_date ? new Date(released_end_date) : released_end_date
       )
   }
 

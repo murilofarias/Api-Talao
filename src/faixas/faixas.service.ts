@@ -19,13 +19,15 @@ export class FaixasService {
 
   
   async getBands(tenant_id, type, only_active ){
-    return await this.getBandsUseCase.execute(
+    const getBandsResponse = await this.getBandsUseCase.execute(
       {
         tenantId: tenant_id,
         type: type,
         onlyActive: only_active
       }
     );
+
+    return getBandsResponse.bandsPage;
   }
 
 
@@ -66,14 +68,14 @@ export class FaixasService {
   }
 
 
-  async solicitarFaixa(solicitacaoFaixa, tenantId: string) {
+  async solicitarFaixa(solicitacaoFaixa, tenant_id: string) {
       const criarFaixaUseCaseResponse = await this.criarFaixaUseCase.execute(
         {
-          numeroInicial: solicitacaoFaixa.numero_inicial,
-          numeroFinal: solicitacaoFaixa.numero_final,
-          prefixo: solicitacaoFaixa.prefixo,
-          tipo: solicitacaoFaixa.tipo,
-          idTenant: tenantId
+          numeroInicial: solicitacaoFaixa.initial_number,
+          numeroFinal: solicitacaoFaixa.final_number,
+          prefixo: solicitacaoFaixa.preffix,
+          tipo: solicitacaoFaixa.type,
+          idTenant: tenant_id
         });
   
       return criarFaixaUseCaseResponse.faixa;

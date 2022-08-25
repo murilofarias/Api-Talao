@@ -1,14 +1,14 @@
 import { IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SolicitacaoAutoDto{
+export class AutoRequestDto{
 
     @ApiProperty()
     @IsUUID()
-    usuario_id: string;
+    user_id: string;
 
     @ApiProperty()
     @IsUUID()
-    equipamento_id: string;
+    device_id: string;
 
 }
