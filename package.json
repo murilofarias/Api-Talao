@@ -1,8 +1,9 @@
 {
-  "name": "helios-api-talao-nestjs-DES",
+  "name": "@helios-web-api-talao",
   "version": "0.0.1",
   "description": "",
   "author": "",
+  "private": true,
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
@@ -21,7 +22,6 @@
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
-    "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.0.5",
